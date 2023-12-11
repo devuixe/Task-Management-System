@@ -108,9 +108,15 @@ class TaskManager(ctk.CTk):
         # Calculate the position to center the window on the main window
         window_width = add_task_window.winfo_reqwidth()
         window_height = add_task_window.winfo_reqheight()
-        position_right = int(self.winfo_screenwidth() / 2.6 - window_width / 2)
-        position_down = int(self.winfo_screenheight() / 2.2 - window_height / 2)
+        position_right = int(self.winfo_screenwidth() / 2.2 - window_width / 2)
+        position_down = int(self.winfo_screenheight() / 2.3 - window_height / 2)
         add_task_window.geometry(f"+{position_right}+{position_down}")
+
+        # Configure row and column weights for responsiveness
+        add_task_window.grid_rowconfigure(0, weight=1)
+        add_task_window.grid_rowconfigure(6, weight=1)
+        add_task_window.grid_columnconfigure(0, weight=1)
+        add_task_window.grid_columnconfigure(2, weight=1)
 
         # Labels and Entry widgets
         tk.Label(add_task_window, text="Task Name:").grid(row=0, column=0, padx=10, pady=10, sticky="e")
@@ -149,10 +155,10 @@ class TaskManager(ctk.CTk):
             due_date_entry.get(),
             status_var.get(),
             done_var.get()
-        ), style="Custom.TButton").grid(row=5, column=0, columnspan=2, pady=20)
+        ), style="Custom.TButton").grid(row=5, column=0, columnspan=3, padx=20, pady=20, sticky='nsew')
         
         # Set the width and height of the add task window
-        add_task_window.geometry("400x300")  # Adjust width and height as needed
+        add_task_window.geometry("400x300")  
 
 
     def add_task(self, task_name, priority, due_date, status, done):
