@@ -5,6 +5,7 @@ from tkcalendar import DateEntry
 from database import TaskDatabase
 from ctypes import windll, byref, sizeof, c_int
 import customtkinter as ctk
+from subprocess import call
 
 class TaskManager(ctk.CTk):
     def __init__(self, *args, **kwargs):
@@ -38,6 +39,7 @@ class TaskManager(ctk.CTk):
         self.create_widgets()
         self.center_window()  # Center the window on startup
 
+
     def create_widgets(self):
         # Create a custom style for the buttons
         self.style.configure("Custom.TButton",
@@ -58,6 +60,10 @@ class TaskManager(ctk.CTk):
         self.style.map("Custom.TButton",
                    background=[("active", "#2F7CB1")],  # Set the background color on hover
                    )
+        
+        #Back Button
+        back_button = ttk.Button(self, text="Log Out", command=self.back_buttoon, style="Custom.TButton")
+        back_button.grid(row=0, column=3, padx=(0, 5), pady=20, sticky="e")
 
         # Search Entry
         self.search_var = tk.StringVar()
@@ -99,6 +105,10 @@ class TaskManager(ctk.CTk):
         # Configure grid weights to make the table expandable/resizable
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
+
+    def back_buttoon(self):
+        app.destroy()
+        call(["python", r"C:\Users\nicol\OneDrive\Documents\School\4th year\python\Final Project\Task-Management-System\main.py"])
 
     def open_add_task_window(self):
         # Add Task Window
