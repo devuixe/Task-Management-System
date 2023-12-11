@@ -2,8 +2,7 @@ import sqlite3
 
 class TaskDatabase:
     def __init__(self):
-        # Connect to the SQLite database (replace 'your_database.db' with your actual database file)
-        self.connection = sqlite3.connect('your_database.db')
+        self.connection = sqlite3.connect('tasks.db')
         self.cursor = self.connection.cursor()
 
         # Create the tasks table if it does not exist
