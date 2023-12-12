@@ -33,7 +33,7 @@ class TaskManager(ctk.CTk):
             byref(c_int(window_text_color)),
             sizeof(c_int))
 
-        self.geometry("750x500")
+        self.geometry("900x500")
 
         # Create GUI
         self.create_widgets()
@@ -80,10 +80,10 @@ class TaskManager(ctk.CTk):
 
 
         # Task Table
-        columns = ["ID", "Task Name", "Priority", "Due Date", "Status", "Done"]
+        columns = ["ID", "Task Name", "User", "Priority", "Due Date", "Status", "Done"]
         self.tree = ttk.Treeview(self, columns=columns, show="headings")
 
-        column_widths = [50, 200, 80, 100, 100, 80]  # Adjust these values as needed
+        column_widths = [50, 200, 75, 80, 100, 100, 80]  # Adjust these values as needed
 
         for col, width in zip(columns, column_widths):
             self.tree.heading(col, text=col)
@@ -133,48 +133,54 @@ class TaskManager(ctk.CTk):
         task_name_entry = tk.Entry(add_task_window)
         task_name_entry.grid(row=0, column=1, padx=10, pady=10)
 
-        tk.Label(add_task_window, text="Priority:").grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        #Add user
+        tk.Label(add_task_window, text="Task By:").grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        user_name_entry = tk.Entry(add_task_window)
+        user_name_entry.grid(row=1, column=1, padx=10, pady=10)
+
+        tk.Label(add_task_window, text="Priority:").grid(row=2, column=0, padx=10, pady=10, sticky="e")
         priority_choices = ["High", "Medium", "Low"]
         priority_var = tk.StringVar()
         priority_var.set(priority_choices[0])
         priority_dropdown = ttk.Combobox(add_task_window, values=priority_choices, textvariable=priority_var)
-        priority_dropdown.grid(row=1, column=1, padx=10, pady=10)
+        priority_dropdown.grid(row=2, column=1, padx=10, pady=10)
 
-        tk.Label(add_task_window, text="Due Date:").grid(row=2, column=0, padx=10, pady=10, sticky="e")
+        tk.Label(add_task_window, text="Due Date:").grid(row=3, column=0, padx=10, pady=10, sticky="e")
         due_date_entry = DateEntry(add_task_window, width=12, background="darkblue", foreground="white", date_pattern="yyyy-mm-dd")
-        due_date_entry.grid(row=2, column=1, padx=10, pady=10)
+        due_date_entry.grid(row=3, column=1, padx=10, pady=10)
 
-        tk.Label(add_task_window, text="Status:").grid(row=3, column=0, padx=10, pady=10, sticky="e")
+        tk.Label(add_task_window, text="Status:").grid(row=4, column=0, padx=10, pady=10, sticky="e")
         status_choices = ["Not Started", "In Progress", "Completed"]
         status_var = tk.StringVar()
         status_var.set(status_choices[0])
         status_dropdown = ttk.Combobox(add_task_window, values=status_choices, textvariable=status_var)
-        status_dropdown.grid(row=3, column=1, padx=10, pady=10)
+        status_dropdown.grid(row=4, column=1, padx=10, pady=10)
 
-        tk.Label(add_task_window, text="Done:").grid(row=4, column=0, padx=10, pady=10, sticky="e")
+        tk.Label(add_task_window, text="Done:").grid(row=5, column=0, padx=10, pady=10, sticky="e")
         done_choices = ["Yes", "No"]
         done_var = tk.StringVar()
         done_var.set(done_choices[1])
         done_dropdown = ttk.Combobox(add_task_window, values=done_choices, textvariable=done_var)
-        done_dropdown.grid(row=4, column=1, padx=10, pady=10)
+        done_dropdown.grid(row=5, column=1, padx=10, pady=10)
 
         # Add Task Button with custom style
         ttk.Button(add_task_window, text="Add Task", command=lambda: self.add_task(
             task_name_entry.get(),
+            user_name_entry.get(),
             priority_var.get(),
             due_date_entry.get(),
             status_var.get(),
             done_var.get()
-        ), style="Custom.TButton").grid(row=5, column=0, columnspan=3, padx=20, pady=20, sticky='nsew')
+        ), style="Custom.TButton").grid(row=6, column=0, columnspan=3, padx=20, pady=20, sticky='nsew')
         
         # Set the width and height of the add task window
-        add_task_window.geometry("400x300")  
+        add_task_window.geometry("400x400")  
 
 
-    def add_task(self, task_name, priority, due_date, status, done):
+    def add_task(self, task_name, user, priority, due_date, status, done):
         try:
             # Add task to the database
-            self.task_db.add_task(task_name, priority, due_date, status, done)
+            self.task_db.add_task(task_name, user, priority, due_date, status, done)
 
             # Refresh the task table
             self.load_tasks()

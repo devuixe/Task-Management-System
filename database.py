@@ -10,6 +10,7 @@ class TaskDatabase:
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_name TEXT,
+                user TEXT,                            
                 priority TEXT,
                 due_date TEXT,
                 status TEXT,
@@ -18,12 +19,12 @@ class TaskDatabase:
         ''')
         self.connection.commit()
 
-    def add_task(self, task_name, priority, due_date, status, done):
+    def add_task(self, task_name, user, priority, due_date, status, done):
         # Insert a new task into the tasks table
         self.cursor.execute('''
-            INSERT INTO tasks (task_name, priority, due_date, status, done)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (task_name, priority, due_date, status, done))
+            INSERT INTO tasks (task_name, user, priority, due_date, status, done)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (task_name, user, priority, due_date, status, done))
         self.connection.commit()
 
     def get_all_tasks(self):
@@ -45,8 +46,8 @@ class TaskDatabase:
         # Search for tasks that match the given search term
         self.cursor.execute('''
             SELECT * FROM tasks
-            WHERE task_name LIKE ? OR priority LIKE ? OR due_date LIKE ? OR status LIKE ? OR done LIKE ?
-        ''', (f'%{search_term}%', f'%{search_term}%', f'%{search_term}%', f'%{search_term}%', f'%{search_term}%'))
+            WHERE task_name LIKE ? OR user LIKE ? OR priority LIKE ? OR due_date LIKE ? OR status LIKE ? OR done LIKE ?
+        ''', (f'%{search_term}%', f'%{search_term}%', f'%{search_term}%', f'%{search_term}%', f'%{search_term}%', f'%{search_term}%'))
         return self.cursor.fetchall()
 
     def __del__(self):
